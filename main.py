@@ -127,4 +127,3 @@ def chatgpt():
         return jsonify(error="OpenAI request failed",
                        details=str(e),
                        body=getattr(e.response, "text", "")), status
-

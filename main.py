@@ -29,11 +29,11 @@ def chatgpt():
         return jsonify(error="OPENAI_API_KEY not configured"), 500
 
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-    payload = {
-        "model": "gpt-4.1-mini",  # TODO: cambia si quieres otro
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.2
-    }
+payload = {
+    "model": "gpt-4o-mini",   # <--- CAMBIA a este
+    "messages": [{"role": "user", "content": prompt}],
+    "temperature": 0.2
+}
 
     try:
         r = requests.post("https://api.openai.com/v1/chat/completions",

@@ -91,3 +91,10 @@ def download_bas(fname):
     if not os.path.isfile(fullpath):
         abort(404)
     return send_from_directory(MODULE_DIR, fname, as_attachment=True)
+# --- PRUEBA MINIMA: RUTA /chatgpt (eco) ---
+from flask import request, jsonify  # por si arriba no está
+
+@app.route("/chatgpt", methods=["POST"])
+def chatgpt():
+    data = request.get_json(silent=True) or {}
+    return jsonify(ok=True, got=data), 200

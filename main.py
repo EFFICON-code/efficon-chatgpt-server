@@ -91,10 +91,40 @@ def download_bas(fname):
     if not os.path.isfile(fullpath):
         abort(404)
     return send_from_directory(MODULE_DIR, fname, as_attachment=True)
-# --- PRUEBA MINIMA: RUTA /chatgpt (eco) ---
-from flask import request, jsonify  # por si arriba no está
+# --- RUTA /chatgpt con OpenAI ---
+import os, requests
+from flask import request, jsonify
 
 @app.route("/chatgpt", methods=["POST"])
 def chatgpt():
     data = request.get_json(silent=True) or {}
-    return jsonify(ok=True, got=data), 200
+    prompt = data.get("prompt", "")
+    if not prompt:
+        return jsonify(error="prompt requerido"), 400
+
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        return jsonify(error="OPENAI_API_KEY not configured"), 500
+
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    payload = {
+        "model": "gpt-4.1-mini",
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.2
+    }
+
+    try:
+        r = requests.post("https://api.openai.com/v1/chat/completions",
+                          headers=headers, json=payload, timeout=120)
+        r.raise_for_status()
+        out = r.json()
+        text = out.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+        return jsonify(ok=True,
+                       entity=os.environ.get("EFFICON_ENTITY_NAME", ""),
+                       answer=text), 200
+    except requests.exceptions.RequestException as e:
+        status = getattr(e.response, "status_code", 502)
+        return jsonify(error="OpenAI request failed",
+                       details=str(e),
+                       body=getattr(e.response, "text", "")), status
+

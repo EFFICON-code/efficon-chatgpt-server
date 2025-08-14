@@ -56,3 +56,38 @@ def chatgpt():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
     app.run(host="0.0.0.0", port=port)
+import os, json
+from flask import Flask, request, jsonify, send_from_directory, abort
+from flask_cors import CORS
+import requests
+
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+ENTITY_NAME = os.environ.get("EFFICON_ENTITY_NAME", "ENTIDAD-NO-SET")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
+
+MODULE_DIR = os.path.join(os.getcwd(), "modules", "pack")
+MANIFEST_PATH = os.path.join(MODULE_DIR, "manifest.json")
+
+@app.get("/healthz")
+def healthz():
+    return jsonify(status="ok", entity=ENTITY_NAME, manifest=os.path.isfile(MANIFEST_PATH)), 200
+
+@app.get("/modules/manifest")
+def get_manifest():
+    if not os.path.isfile(MANIFEST_PATH):
+        return jsonify(error="manifest not found"), 404
+    with open(MANIFEST_PATH, "r", encoding="utf-8") as f:
+        mf = json.load(f)
+    mf["entity"] = ENTITY_NAME
+    return jsonify(mf), 200
+
+@app.get("/modules/download/<path:fname>")
+def download_bas(fname):
+    if not fname.lower().endswith(".bas"):
+        abort(400)
+    fullpath = os.path.join(MODULE_DIR, fname)
+    if not os.path.isfile(fullpath):
+        abort(404)
+    return send_from_directory(MODULE_DIR, fname, as_attachment=True)

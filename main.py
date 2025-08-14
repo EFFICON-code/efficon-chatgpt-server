@@ -1,95 +1,58 @@
+import os
+import json
+import requests
 from flask import Flask, request, jsonify
-import requests, os, traceback
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=False)
 
-API_KEY     = os.getenv("OPENAI_API_KEY", "")
-PROJECT_ID  = os.getenv("OPENAI_PROJECT_ID", "")
-OPENAI_URL  = "https://api.openai.com/v1/chat/completions"
-MODEL       = os.getenv("MODEL", "gpt-4o")
+@app.get("/healthz")
+def healthz():
+    return jsonify(status="ok"), 200
 
-def openai_call(messages, max_tokens=2000, temperature=0.3, timeout_s=180):
-    if not API_KEY:
-        return {
-            "choices": [],
-            "error": "API_KEY no configurada",
-            "code": 10001,
-            "ok": False,
-            "text": ""
-        }
-
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-    }
-    if PROJECT_ID:
-        headers["OpenAI-Project"] = PROJECT_ID
-
-    payload = {
-        "model": MODEL,
-        "messages": messages,
-        "max_tokens": max_tokens,
-        "temperature": temperature,
-        "stream": False
-    }
-
-    try:
-        resp = requests.post(OPENAI_URL, headers=headers, json=payload, timeout=timeout_s)
-        if resp.status_code != 200:
-            return {
-                "choices": [],
-                "error": f"OpenAI error HTTP {resp.status_code}",
-                "code": resp.status_code,
-                "ok": False,
-                "text": resp.text[:800]
-            }
-        return resp.json()
-    except Exception as e:
-        return {
-            "choices": [],
-            "error": str(e),
-            "code": 10002,
-            "ok": False,
-            "text": "",
-            "_trace": traceback.format_exc()[:800]
-        }
-
-@app.route("/")
-def home():
-    return "✅ Servidor de ChatGPT activo en Railway."
-
-@app.route("/chatgpt", methods=["POST"])
+@app.post("/chatgpt")
 def chatgpt():
+    data = request.get_json(silent=True) or {}
+    prompt = data.get("prompt", "")
+    entidad = data.get("entidad", "")
+    token = data.get("token", "")
+
+    # Seguridad simple por variables (opcional)
+    allowed_entidad = os.environ.get("EFFICON_ENTIDAD", "")
+    allowed_token = os.environ.get("EFFICON_TOKEN", "")
+    if (allowed_entidad and entidad != allowed_entidad) or (allowed_token and token != allowed_token):
+        return jsonify(error="Auth failed"), 403
+
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        return jsonify(error="OPENAI_API_KEY not configured"), 500
+
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    payload = {
+        "model": "gpt-4.1-mini",  # TODO: cambia si quieres otro
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.2
+    }
+
     try:
-        data = request.get_json(force=True, silent=True) or {}
-        userPrompt = (data.get("prompt") or "").strip()
+        r = requests.post("https://api.openai.com/v1/chat/completions",
+                          headers=headers, json=payload, timeout=120)
+        r.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        status = getattr(e.response, "status_code", 500)
+        return jsonify(error="OpenAI request failed",
+                       details=str(e),
+                       body=getattr(e.response, "text", "")), status
 
-        if not userPrompt:
-            return jsonify({
-                "choices": [],
-                "error": "Prompt vacío",
-                "code": 10003,
-                "ok": False,
-                "text": ""
-            }), 200
+    out = r.json()
+    text = ""
+    if out.get("choices"):
+        msg = out["choices"][0].get("message", {})
+        text = msg.get("content", "")
 
-        messages = [{"role": "user", "content": userPrompt}]
-        result = openai_call(messages)
-        if "choices" not in result:
-            result["choices"] = []
-        if "ok" not in result:
-            result["ok"] = False
-        if "code" not in result:
-            result["code"] = 10004
+    return jsonify(ok=True, entidad=entidad, answer=text), 200
 
-        return jsonify(result), 200
-    except Exception as e:
-        return jsonify({
-            "choices": [],
-            "error": "Error inesperado",
-            "code": 10005,
-            "ok": False,
-            "text": "",
-            "_trace": traceback.format_exc()[:800]
-        }), 200
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", "8000"))
+    app.run(host="0.0.0.0", port=port)

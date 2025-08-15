@@ -43,11 +43,18 @@ def download_bas(fname):
         abort(404)
     return send_from_directory(MODULE_DIR, fname, as_attachment=True)
 
-# -------------------- ChatGPT ---------------------
+# -------------------- ChatGPT (con token opcional) ---------------------
 @app.post("/chatgpt")
 def chatgpt():
     data = request.get_json(silent=True) or {}
     prompt = data.get("prompt", "")
+
+    # Token opcional: si EFFICON_TOKEN existe, lo exigimos
+    token_expected = os.environ.get("EFFICON_TOKEN", "").strip()
+    token_recv = (request.headers.get("X-EFFICON-TOKEN", "") or data.get("token", "")).strip()
+    if token_expected and token_recv != token_expected:
+        return jsonify(error="Auth failed: invalid token"), 403
+
     if not prompt:
         return jsonify(error="prompt requerido"), 400
 
@@ -60,31 +67,22 @@ def chatgpt():
     }
     payload = {
         "model": MODEL_ID,
-        "messages": [
-            {"role": "user", "content": prompt}
-        ],
+        "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.2
     }
 
     try:
-        r = requests.post(
-            "https://api.openai.com/v1/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=120
-        )
+        r = requests.post("https://api.openai.com/v1/chat/completions",
+                          headers=headers, json=payload, timeout=120)
         r.raise_for_status()
         out = r.json()
         text = out.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
         return jsonify(ok=True, entity=ENTITY_NAME, answer=text), 200
     except requests.exceptions.RequestException as e:
         status = getattr(e.response, "status_code", 502)
-        return jsonify(
-            error="OpenAI request failed",
-            details=str(e),
-            body=getattr(e.response, "text", "")
-        ), status
-
+        return jsonify(error="OpenAI request failed",
+                       details=str(e),
+                       body=getattr(e.response, "text", "")), status
 # -------------------- Run local -------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8080"))

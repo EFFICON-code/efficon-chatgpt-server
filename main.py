@@ -11,6 +11,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # Config por ENTIDAD / API
 ENTITY_NAME = os.environ.get("EFFICON_ENTITY_NAME", "ENTIDAD-NO-SET")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
+MODEL_ID = os.environ.get("EFFICON_MODEL", "gpt-4o")
 
 # Rutas y archivos de módulos
 MODULE_DIR = os.path.join(os.getcwd(), "modules", "pack")
@@ -56,12 +57,11 @@ def chatgpt():
     headers = {
         "Authorization": f"Bearer {OPENAI_API_KEY}",
         "Content-Type": "application/json"
-    }
-    payload = {
-        "model": "gpt-4o-mini",
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.2
-    }
+payload = {
+    "model": MODEL_ID,
+    "messages": [{"role": "user", "content": prompt}],
+    "temperature": 0.2
+}
 
     try:
         r = requests.post(

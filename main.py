@@ -8,10 +8,10 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# Config por ENTIDAD / API
+# -------------------- Config ----------------------
 ENTITY_NAME = os.environ.get("EFFICON_ENTITY_NAME", "ENTIDAD-NO-SET")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
-MODEL_ID = os.environ.get("EFFICON_MODEL", "gpt-4o")
+MODEL_ID = os.environ.get("EFFICON_MODEL", "gpt-4o")  # <-- puedes cambiarlo en Railway sin tocar código
 
 # Rutas y archivos de módulos
 MODULE_DIR = os.path.join(os.getcwd(), "modules", "pack")
@@ -57,16 +57,21 @@ def chatgpt():
     headers = {
         "Authorization": f"Bearer {OPENAI_API_KEY}",
         "Content-Type": "application/json"
-payload = {
-    "model": MODEL_ID,
-    "messages": [{"role": "user", "content": prompt}],
-    "temperature": 0.2
-}
+    }
+    payload = {
+        "model": MODEL_ID,
+        "messages": [
+            {"role": "user", "content": prompt}
+        ],
+        "temperature": 0.2
+    }
 
     try:
         r = requests.post(
             "https://api.openai.com/v1/chat/completions",
-            headers=headers, json=payload, timeout=120
+            headers=headers,
+            json=payload,
+            timeout=120
         )
         r.raise_for_status()
         out = r.json()
@@ -84,3 +89,4 @@ payload = {
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8080"))
     app.run(host="0.0.0.0", port=port)
+    

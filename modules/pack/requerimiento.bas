@@ -1,4 +1,3 @@
-Attribute VB_Name = "requerimiento"
 Sub Requerimiento()
     Dim wdApp As Object
     Dim wdDoc As Object
@@ -44,7 +43,7 @@ Sub Requerimiento()
     ' Leer el ID de la plantilla desde la celda B133 de la hoja "BBDD"
     plantillaID = wsBase.range("B133").Value
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda B133 de la hoja BBDD.", vbExclamation
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda B133 de la hoja BBDD.", vbExclamation
         Exit Sub
     End If
 
@@ -54,11 +53,11 @@ Sub Requerimiento()
     ' Proteger nuevamente la hoja "BBDD"
     wsBase.Protect password:="PROEST2023"
 
-    ' Mostrar cuadro de di·logo para la ubicaciÛn donde se guardar· el documento terminado
+    ' Mostrar cuadro de di√°logo para la ubicaci√≥n donde se guardar√° el documento terminado
     guardarRuta = Application.GetSaveAsFilename("DocumentoTerminado.docx", _
         "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Or guardarRuta = "" Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         Exit Sub
     End If
 
@@ -89,7 +88,7 @@ Sub Requerimiento()
     ws.Protect password:=CLAVE
     ws.Visible = xlSheetHidden
     
-    ' Construir la ruta temporal donde se descargar· la plantilla
+    ' Construir la ruta temporal donde se descargar√° la plantilla
     rutaDescargaTemporal = Environ("TEMP") & "\Plantilla_Requerimiento_Temp.docx"
     
     ' Descargar la plantilla con MSXML2.ServerXMLHTTP
@@ -98,7 +97,7 @@ Sub Requerimiento()
     objHTTP.send
 
     If objHTTP.Status = 200 Then
-        ' Guardar el archivo descargado en la ubicaciÛn temporal
+        ' Guardar el archivo descargado en la ubicaci√≥n temporal
         Set objStream = CreateObject("ADODB.Stream")
         objStream.Type = 1 ' Tipo binario
         objStream.Open
@@ -106,8 +105,8 @@ Sub Requerimiento()
         objStream.SaveToFile rutaDescargaTemporal, 2 ' Sobrescribe si existe
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. Verifique la conexiÛn o el enlace." & vbCrLf & _
-               "CÛdigo de estado: " & objHTTP.Status & " - " & objHTTP.statusText, vbExclamation
+        MsgBox "Error al descargar la plantilla. Verifique la conexi√≥n o el enlace." & vbCrLf & _
+               "C√≥digo de estado: " & objHTTP.Status & " - " & objHTTP.statusText, vbExclamation
         Exit Sub
     End If
 
@@ -202,5 +201,6 @@ Sub Requerimiento()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+
 
 

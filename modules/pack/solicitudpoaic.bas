@@ -1,6 +1,6 @@
 Attribute VB_Name = "solicitudpoaic"
-Sub ExportarAWord_Solicitud_POA_IC()
-    ' DeclaraciÛn de variables
+Sub Solicitud_POA_IC()
+    ' Declaraci√≥n de variables
     Dim wdApp As Object
     Dim wdDoc As Object
     
@@ -43,7 +43,7 @@ Sub ExportarAWord_Solicitud_POA_IC()
     ' Leer el ID de la plantilla desde la celda B145
     plantillaID = wsBase.range("B145").Value
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda B145 de la hoja BBDD.", vbExclamation
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda B145 de la hoja BBDD.", vbExclamation
         Exit Sub
     End If
 
@@ -53,11 +53,11 @@ Sub ExportarAWord_Solicitud_POA_IC()
     ' Proteger nuevamente la hoja "BBDD"
     wsBase.Protect password:=claveGeneral
 
-    ' Mostrar cuadro de di·logo para seleccionar la ubicaciÛn donde guardar el documento terminado
+    ' Mostrar cuadro de di√°logo para seleccionar la ubicaci√≥n donde guardar el documento terminado
     guardarRuta = Application.GetSaveAsFilename("SolicitudPOA_IC_Terminado.docx", _
         "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Or guardarRuta = "" Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         Exit Sub
     End If
 
@@ -100,8 +100,8 @@ Sub ExportarAWord_Solicitud_POA_IC()
         objStream.SaveToFile rutaDescargaTemporal, 2 ' Sobrescribe si existe
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. Verifique la conexiÛn o el enlace." & vbCrLf & _
-               "CÛdigo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
+        MsgBox "Error al descargar la plantilla. Verifique la conexi√≥n o el enlace." & vbCrLf & _
+               "C√≥digo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
         Exit Sub
     End If
 
@@ -167,4 +167,5 @@ Sub ExportarAWord_Solicitud_POA_IC()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+
 

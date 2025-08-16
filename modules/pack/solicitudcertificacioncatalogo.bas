@@ -1,6 +1,6 @@
 Attribute VB_Name = "solicitudcertificacioncatalogo"
-Sub ExportarAWord_SolicitudCatalogo()
-    ' DeclaraciÛn de variables
+Sub Solicitud_Catalogo()
+    ' Declaraci√≥n de variables
     Dim wdApp As Object
     Dim wdDoc As Object
     Dim objHTTP As Object
@@ -41,7 +41,7 @@ Sub ExportarAWord_SolicitudCatalogo()
     ' Leer el ID de la plantilla desde la celda B135
     plantillaID = wsBase.range("B135").Value
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda B135 de la hoja BBDD.", vbExclamation
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda B135 de la hoja BBDD.", vbExclamation
         Exit Sub
     End If
     
@@ -51,11 +51,11 @@ Sub ExportarAWord_SolicitudCatalogo()
     ' Proteger nuevamente la hoja "BBDD"
     wsBase.Protect password:=claveGeneral
 
-    ' Mostrar cuadro de di·logo para seleccionar la ubicaciÛn donde guardar el documento terminado
+    ' Mostrar cuadro de di√°logo para seleccionar la ubicaci√≥n donde guardar el documento terminado
     guardarRuta = Application.GetSaveAsFilename("DocumentoTerminado.docx", _
         "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Or guardarRuta = "" Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         Exit Sub
     End If
 
@@ -91,7 +91,7 @@ Sub ExportarAWord_SolicitudCatalogo()
     objHTTP.send
 
     If objHTTP.Status = 200 Then
-        ' Guardar el archivo descargado en la ubicaciÛn temporal
+        ' Guardar el archivo descargado en la ubicaci√≥n temporal
         Set objStream = CreateObject("ADODB.Stream")
         objStream.Type = 1 ' binario
         objStream.Open
@@ -99,8 +99,8 @@ Sub ExportarAWord_SolicitudCatalogo()
         objStream.SaveToFile rutaDescargaTemporal, 2 ' Sobrescribe si existe
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. Verifique la conexiÛn o el enlace." & vbCrLf & _
-               "CÛdigo de estado: " & objHTTP.Status & " - " & objHTTP.statusText, vbExclamation
+        MsgBox "Error al descargar la plantilla. Verifique la conexi√≥n o el enlace." & vbCrLf & _
+               "C√≥digo de estado: " & objHTTP.Status & " - " & objHTTP.statusText, vbExclamation
         Exit Sub
     End If
 
@@ -139,7 +139,7 @@ Sub ExportarAWord_SolicitudCatalogo()
         If .Bookmarks.Exists("Periodo") Then .Bookmarks("Periodo").range.Text = periodo
     End With
 
-    ' AÒadir datos de productos desde el rango visible
+    ' A√±adir datos de productos desde el rango visible
     Set wsProductos = ThisWorkbook.Sheets("PRODUCTOS")
     wsProductos.Unprotect password:=claveGeneral
 
@@ -190,4 +190,5 @@ Sub ExportarAWord_SolicitudCatalogo()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+
 

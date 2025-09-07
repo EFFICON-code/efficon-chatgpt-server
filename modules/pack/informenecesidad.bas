@@ -1,6 +1,6 @@
-Attribute VB_Name = "informenecesidad"
+Attribute VB_Name = "Informe_de_Necesidad"
 Sub Informe_de_Necesidad()
-    ' DeclaraciÛn de variables
+    ' Declaraci√≥n de variables
     Dim wdApp As Object
     Dim wdDoc As Object
 
@@ -28,6 +28,8 @@ Sub Informe_de_Necesidad()
     Dim objetivoGeneral As String
     Dim objetivosEspecificos As String
     Dim objetoDeContratacion As String
+    Dim objetoDeContratacion1 As String
+    Dim objetoDeContratacion2 As String
     Dim metodoDeCompra As String
     Dim competenciasEntidadMunicipal As String
     Dim capacidadInstalada As String
@@ -50,6 +52,9 @@ Sub Informe_de_Necesidad()
     Dim TipoProducto As String
     Dim tipoProcedimiento As String
     Dim estandarizacion As String
+    Dim responsable_necesidad As String
+    Dim cargo_responsable_necesidad As String
+    Dim referencia_pac As String
 
     ' Claves para desproteger/proteger
     Const claveSecuencias As String = "Admin1991"
@@ -65,7 +70,7 @@ Sub Informe_de_Necesidad()
     ' Leer el ID de la plantilla desde la celda B136
     plantillaID = wsBase.range("B136").Value
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda B136 de la hoja BBDD.", vbExclamation
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda B136 de la hoja BBDD.", vbExclamation
         Exit Sub
     End If
 
@@ -75,10 +80,10 @@ Sub Informe_de_Necesidad()
     ' Proteger nuevamente la hoja "BBDD"
     wsBase.Protect password:=claveGeneral
 
-    ' Mostrar cuadro de di·logo para seleccionar la ubicaciÛn donde guardar el documento terminado
+    ' Mostrar cuadro de di√°logo para seleccionar la ubicaci√≥n donde guardar el documento terminado
     guardarRuta = Application.GetSaveAsFilename("DocumentoTerminado.docx", "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Or guardarRuta = "" Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         Exit Sub
     End If
 
@@ -105,6 +110,8 @@ Sub Informe_de_Necesidad()
     objetivoGeneral = ws.range("AD2").Value
     objetivosEspecificos = ws.range("AE2").Value
     objetoDeContratacion = ws.range("Q2").Value
+    objetoDeContratacion1 = ws.range("Q2").Value
+    objetoDeContratacion2 = ws.range("Q2").Value
     metodoDeCompra = ws.range("AL2").Value
     competenciasEntidadMunicipal = ws.range("AG2").Value
     capacidadInstalada = ws.range("AK2").Value
@@ -127,7 +134,10 @@ Sub Informe_de_Necesidad()
     TipoProducto = ws.range("P2").Value
     tipoProcedimiento = ws.range("S2").Value
     estandarizacion = ws.range("HD2").Value
-
+    responsable_necesidad = ws.range("HH2").Value
+    cargo_responsable_necesidad = ws.range("HI2").Value
+    referencia_pac = ws.range("HJ2").Value
+  
     ' Proteger y ocultar la hoja "SECUENCIAS"
     ws.Protect password:=claveSecuencias
     ws.Visible = xlSheetHidden
@@ -138,10 +148,10 @@ Sub Informe_de_Necesidad()
    ' Descargar la plantilla con MSXML2.ServerXMLHTTP (sin volver a declarar objHTTP y objStream)
     Set objHTTP = CreateObject("MSXML2.ServerXMLHTTP.6.0")
     objHTTP.Open "GET", plantillaRuta, False
-    objHTTP.send
+    objHTTP.Send
 
     If objHTTP.status = 200 Then
-        ' Guardar el archivo descargado en la ubicaciÛn temporal
+        ' Guardar el archivo descargado en la ubicaci√≥n temporal
         Set objStream = CreateObject("ADODB.Stream")
         objStream.Type = 1 ' binario
         objStream.Open
@@ -149,8 +159,8 @@ Sub Informe_de_Necesidad()
         objStream.SaveToFile rutaDescargaTemporal, 2 ' Sobrescribe si existe
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. Verifique la conexiÛn o el enlace." & vbCrLf & _
-               "CÛdigo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
+        MsgBox "Error al descargar la plantilla. Verifique la conexi√≥n o el enlace." & vbCrLf & _
+               "C√≥digo de estado: " & objHTTP.status & " - " & objHTTP.StatusText, vbExclamation
         Exit Sub
     End If
 
@@ -193,6 +203,8 @@ Sub Informe_de_Necesidad()
         If .Bookmarks.Exists("Objetivo_General") Then .Bookmarks("Objetivo_General").range.Text = objetivoGeneral
         If .Bookmarks.Exists("Objetivos_Especificos") Then .Bookmarks("Objetivos_Especificos").range.Text = objetivosEspecificos
         If .Bookmarks.Exists("Objeto_de_Contratacion") Then .Bookmarks("Objeto_de_Contratacion").range.Text = objetoDeContratacion
+        If .Bookmarks.Exists("Objeto_de_Contratacion_1") Then .Bookmarks("Objeto_de_Contratacion_1").range.Text = objetoDeContratacion1
+        If .Bookmarks.Exists("Objeto_de_Contratacion_2") Then .Bookmarks("Objeto_de_Contratacion_2").range.Text = objetoDeContratacion2
         If .Bookmarks.Exists("Metodo_de_Compra") Then .Bookmarks("Metodo_de_Compra").range.Text = metodoDeCompra
         If .Bookmarks.Exists("Competencias_Entidad_Municipal") Then .Bookmarks("Competencias_Entidad_Municipal").range.Text = competenciasEntidadMunicipal
         If .Bookmarks.Exists("Capacidad_Instalada") Then .Bookmarks("Capacidad_Instalada").range.Text = capacidadInstalada
@@ -217,7 +229,10 @@ Sub Informe_de_Necesidad()
         If .Bookmarks.Exists("Tipo_producto") Then .Bookmarks("Tipo_producto").range.Text = TipoProducto
         If .Bookmarks.Exists("Tipo_procedimiento") Then .Bookmarks("Tipo_procedimiento").range.Text = tipoProcedimiento
         If .Bookmarks.Exists("Estandarizacion") Then .Bookmarks("Estandarizacion").range.Text = estandarizacion
-        ' AÒadir datos de productos desde la hoja PRODUCTOS
+        If .Bookmarks.Exists("Responsable_Necesidad") Then .Bookmarks("Responsable_Necesidad").range.Text = estandarizacion
+        If .Bookmarks.Exists("Cargo_Responsable_Necesidad") Then .Bookmarks("Cargo_Responsable_Necesidad").range.Text = cargo_responsable_necesidad
+        If .Bookmarks.Exists("Referencia_PAC") Then .Bookmarks("Referencia_PAC").range.Text = referencia_pac
+        ' A√±adir datos de productos desde la hoja PRODUCTOS
         Set wsProductos = ThisWorkbook.Sheets("PRODUCTOS")
         wsProductos.Unprotect password:=claveGeneral
 
@@ -269,6 +284,4 @@ Sub Informe_de_Necesidad()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
-
-
 

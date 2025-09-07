@@ -1,6 +1,6 @@
-Attribute VB_Name = "terminosdereferenciaferia"
+Attribute VB_Name = "Terminos_de_Referencia_Ferias_Inclusivas"
 Sub Terminos_de_Referencia_Ferias_Inclusivas()
-    ' DeclaraciÛn de variables
+    ' Declaraci√≥n de variables
     Dim wdApp As Object
     Dim wdDoc As Object
 
@@ -63,7 +63,7 @@ Sub Terminos_de_Referencia_Ferias_Inclusivas()
     ' Leer el ID de la plantilla desde la celda D135
     plantillaID = wsBase.range("D135").Value
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda D135 de la hoja BBDD.", vbExclamation
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda D135 de la hoja BBDD.", vbExclamation
         Exit Sub
     End If
 
@@ -73,11 +73,11 @@ Sub Terminos_de_Referencia_Ferias_Inclusivas()
     ' Proteger nuevamente la hoja "BBDD"
     wsBase.Protect password:=claveGeneral
 
-    ' Mostrar cuadro de di·logo para seleccionar la ubicaciÛn donde guardar el documento terminado
+    ' Mostrar cuadro de di√°logo para seleccionar la ubicaci√≥n donde guardar el documento terminado
     guardarRuta = Application.GetSaveAsFilename("DocumentoTerminado.docx", _
         "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Or guardarRuta = "" Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         Exit Sub
     End If
 
@@ -146,8 +146,8 @@ Sub Terminos_de_Referencia_Ferias_Inclusivas()
         objStream.SaveToFile rutaDescargaTemporal, 2 ' Sobrescribe si existe
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. Verifique la conexiÛn o el enlace." & vbCrLf & _
-               "CÛdigo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
+        MsgBox "Error al descargar la plantilla. Verifique la conexi√≥n o el enlace." & vbCrLf & _
+               "C√≥digo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
         Exit Sub
     End If
 
@@ -289,6 +289,7 @@ Sub Terminos_de_Referencia_Ferias_Inclusivas()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+
 
 
 

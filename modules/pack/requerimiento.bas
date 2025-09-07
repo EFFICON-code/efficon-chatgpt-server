@@ -1,4 +1,4 @@
-Attribute VB_Name = "requerimiento"
+Attribute VB_Name = "Requerimiento"
 Sub Requerimiento()
     Dim wdApp As Object
     Dim wdDoc As Object
@@ -202,6 +202,7 @@ Sub Requerimiento()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+
 
 
 

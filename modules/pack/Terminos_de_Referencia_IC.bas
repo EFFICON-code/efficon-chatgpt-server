@@ -1,6 +1,6 @@
-Attribute VB_Name = "terminosdereferenciainfima"
+Attribute VB_Name = "Terminos_de_Referencia_IC"
 Sub Terminos_de_Referencia_IC()
-    ' DeclaraciÛn de variables
+    ' Declaraci√≥n de variables
     Dim wdApp As Object
     Dim wdDoc As Object
 
@@ -56,7 +56,7 @@ Sub Terminos_de_Referencia_IC()
     ' Leer el ID de la plantilla desde la celda B138
     plantillaID = wsBase.range("B138").Value
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda B138 de la hoja BBDD.", vbExclamation
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda B138 de la hoja BBDD.", vbExclamation
         Exit Sub
     End If
 
@@ -66,11 +66,11 @@ Sub Terminos_de_Referencia_IC()
     ' Proteger nuevamente la hoja "BBDD"
     wsBase.Protect password:=claveGeneral
 
-    ' Mostrar di·logo para elegir ubicaciÛn y nombre de guardado
+    ' Mostrar di√°logo para elegir ubicaci√≥n y nombre de guardado
     guardarRuta = Application.GetSaveAsFilename("DocumentoTerminado.docx", _
         "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Or guardarRuta = "" Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         Exit Sub
     End If
 
@@ -128,8 +128,8 @@ Sub Terminos_de_Referencia_IC()
         objStream.SaveToFile rutaDescargaTemporal, 2
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. Revise la conexiÛn o el enlace." & vbCrLf & _
-               "CÛdigo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
+        MsgBox "Error al descargar la plantilla. Revise la conexi√≥n o el enlace." & vbCrLf & _
+               "C√≥digo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
         Exit Sub
     End If
 
@@ -185,7 +185,7 @@ Sub Terminos_de_Referencia_IC()
         If .Bookmarks.Exists("Marco_Legal2") Then .Bookmarks("Marco_Legal2").range.Text = marcoLegal2
         If .Bookmarks.Exists("Justificacion") Then .Bookmarks("Justificacion").range.Text = justificacion
 
-        ' AÒadir datos de productos desde la hoja "PRODUCTOS"
+        ' A√±adir datos de productos desde la hoja "PRODUCTOS"
         Set wsProductos = ThisWorkbook.Sheets("PRODUCTOS")
         wsProductos.Unprotect password:=claveGeneral
 
@@ -236,4 +236,5 @@ Sub Terminos_de_Referencia_IC()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+
 

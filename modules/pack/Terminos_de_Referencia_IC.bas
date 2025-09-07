@@ -1,9 +1,8 @@
 Attribute VB_Name = "Terminos_de_Referencia_IC"
 Sub Terminos_de_Referencia_IC()
     ' Declaración de variables
-    Dim wdApp As Object
-    Dim wdDoc As Object
-
+    Dim objHTTP As Object
+    Dim objStream As Object
     Dim rutaDescargaTemporal As String
     Dim plantillaID As String
     Dim plantillaRuta As String
@@ -15,6 +14,9 @@ Sub Terminos_de_Referencia_IC()
 
     Dim unidadRequirente As String
     Dim objetoDeContratacion As String
+    Dim tipodecompra As String
+    Dim tipodecontratacion As String
+    
     Dim antecedente1 As String
     Dim antecedente2 As String
     Dim antecedente3 As String
@@ -40,10 +42,15 @@ Sub Terminos_de_Referencia_IC()
     Dim marcoLegal1 As String
     Dim marcoLegal2 As String
     Dim justificacion As String
-
-    ' Clave para desproteger la hoja "SECUENCIAS"
+    Dim vigenciatecnologica As String
+    Dim responsable_solicitud As String
+    Dim responsable_area As String
+    Dim multas As String
+    Dim evaluacion As String
+    Dim obligaciones_contratante As String
+    Dim funciones_administrador As String
+        ' Clave para desproteger la hoja
     Const claveSecuencias As String = "Admin1991"
-    ' Clave general para la estructura y otras hojas
     Const claveGeneral As String = "PROEST2023"
 
     ' Desproteger la estructura del libro
@@ -53,20 +60,20 @@ Sub Terminos_de_Referencia_IC()
     Set wsBase = ThisWorkbook.Sheets("BBDD")
     wsBase.Unprotect password:=claveGeneral
 
-    ' Leer el ID de la plantilla desde la celda B138
-    plantillaID = wsBase.range("B138").Value
+    ' Leer el ID de la plantilla desde la celda B137
+    plantillaID = wsBase.range("B137").Value
     If plantillaID = "" Then
-        MsgBox "No se encontró el ID de la plantilla en la celda B138 de la hoja BBDD.", vbExclamation
+        MsgBox "No se encontró el ID de la plantilla en la celda B137 de la hoja BBDD.", vbExclamation
         Exit Sub
     End If
 
-    ' Construir la URL de la plantilla (p.e., Google Drive)
+    ' Construir la URL de descarga de la plantilla
     plantillaRuta = "https://drive.google.com/uc?export=download&id=" & plantillaID
 
     ' Proteger nuevamente la hoja "BBDD"
     wsBase.Protect password:=claveGeneral
 
-    ' Mostrar diálogo para elegir ubicación y nombre de guardado
+    ' Mostrar cuadro de diálogo para seleccionar la ubicación donde guardar el documento terminado
     guardarRuta = Application.GetSaveAsFilename("DocumentoTerminado.docx", _
         "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Or guardarRuta = "" Then
@@ -81,9 +88,12 @@ Sub Terminos_de_Referencia_IC()
     End If
     ws.Unprotect password:=claveSecuencias
 
-    ' Leer datos de la hoja "SECUENCIAS"
+    ' Leer datos de Excel
     unidadRequirente = ws.range("D2").Value
     objetoDeContratacion = ws.range("Q2").Value
+    objetoDeContratacion_1 = ws.range("Q2").Value
+    tipodecompra = ws.range("O2").Value
+    tipodecontratacion = ws.range("S2").Value
     antecedente1 = ws.range("Z2").Value
     antecedente2 = ws.range("AA2").Value
     antecedente3 = ws.range("AB2").Value
@@ -109,27 +119,39 @@ Sub Terminos_de_Referencia_IC()
     marcoLegal1 = ws.range("Z2").Value
     marcoLegal2 = ws.range("AL2").Value
     justificacion = ws.range("AF2").Value
-
-    ' Proteger y ocultar la hoja SECUENCIAS
+    vigenciatecnologica = ws.range("V2").Value
+    responsable_solicitud = ws.range("G2").Value
+    responsable_area = ws.range("E2").Value
+    multas = ws.range("HK2").Value
+    evaluacion = ws.range("HL2").Value
+    obligaciones_contratante = ws.range("HM2").Value
+    funciones_administrador = ws.range("HM2").Value
+    transferencia_tecnologica = ws.range("CN2").Value
+    requisitos_transferencia = ws.range("CO2").Value
+    ' Proteger y ocultar la hoja nuevamente
     ws.Protect password:=claveSecuencias
     ws.Visible = xlSheetHidden
 
-    ' Descargar la plantilla a una ruta temporal
-    rutaDescargaTemporal = Environ("TEMP") & "\Plantilla_TerminosRef_IC_Temp.docx"
+    ' Ruta temporal donde se descargará la plantilla
+    rutaDescargaTemporal = Environ("TEMP") & "\Plantilla_EspecTecnicasIC_Temp.docx"
+    Debug.Print "Ruta temporal: " & rutaDescargaTemporal
+
+    ' Descargar la plantilla
     Set objHTTP = CreateObject("MSXML2.ServerXMLHTTP.6.0")
-    objHTTP.Open "GET", plantillaRuta, False
-    objHTTP.send
+        objHTTP.Open "GET", plantillaRuta, False
+        objHTTP.Send
 
     If objHTTP.status = 200 Then
+        ' Guardar el archivo en la ubicación temporal
         Set objStream = CreateObject("ADODB.Stream")
         objStream.Type = 1 ' binario
         objStream.Open
         objStream.Write objHTTP.ResponseBody
-        objStream.SaveToFile rutaDescargaTemporal, 2
+        objStream.SaveToFile rutaDescargaTemporal, 2 ' Sobrescribe si existe
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. Revise la conexión o el enlace." & vbCrLf & _
-               "Código de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
+        MsgBox "Error al descargar la plantilla. Verifique la conexión o el enlace." & vbCrLf & _
+               "Código de estado: " & objHTTP.status & " - " & objHTTP.StatusText, vbExclamation
         Exit Sub
     End If
 
@@ -159,6 +181,9 @@ Sub Terminos_de_Referencia_IC()
     With wdDoc
         If .Bookmarks.Exists("Unidad_Requirente") Then .Bookmarks("Unidad_Requirente").range.Text = unidadRequirente
         If .Bookmarks.Exists("Objeto_de_Contratacion") Then .Bookmarks("Objeto_de_Contratacion").range.Text = objetoDeContratacion
+        If .Bookmarks.Exists("Objeto_de_Contratacion_1") Then .Bookmarks("Objeto_de_Contratacion_1").range.Text = objetoDeContratacion
+        If .Bookmarks.Exists("Tipo_de_Compra") Then .Bookmarks("Tipo_de_Compra").range.Text = tipodecompra
+        If .Bookmarks.Exists("Tipo_de_Contratacion") Then .Bookmarks("Tipo_de_Contratacion").range.Text = tipodecontratacion
         If .Bookmarks.Exists("Antecedente1") Then .Bookmarks("Antecedente1").range.Text = antecedente1
         If .Bookmarks.Exists("Antecedente2") Then .Bookmarks("Antecedente2").range.Text = antecedente2
         If .Bookmarks.Exists("Antecedente3") Then .Bookmarks("Antecedente3").range.Text = antecedente3
@@ -171,11 +196,13 @@ Sub Terminos_de_Referencia_IC()
         If .Bookmarks.Exists("Forma_de_Pago") Then .Bookmarks("Forma_de_Pago").range.Text = formaDePago
         If .Bookmarks.Exists("Plazo") Then .Bookmarks("Plazo").range.Text = plazo
         If .Bookmarks.Exists("Obligaciones_Contratista") Then .Bookmarks("Obligaciones_Contratista").range.Text = obligacionesContratista
+        If .Bookmarks.Exists("Obligaciones_Contratante") Then .Bookmarks("Obligaciones_Contratante").range.Text = obligacionescontrante
         If .Bookmarks.Exists("Vigencia_Oferta") Then .Bookmarks("Vigencia_Oferta").range.Text = vigenciaOferta
+        If .Bookmarks.Exists("Vigencia_Oferta_1") Then .Bookmarks("Vigencia_Oferta_1").range.Text = vigenciaOferta
         If .Bookmarks.Exists("Datos_Proforma") Then .Bookmarks("Datos_Proforma").range.Text = datosProforma
         If .Bookmarks.Exists("Proforma") Then .Bookmarks("Proforma").range.Text = proforma
         If .Bookmarks.Exists("Lugar_de_Entrega") Then .Bookmarks("Lugar_de_Entrega").range.Text = lugarDeEntrega
-        If .Bookmarks.Exists("Garantia") Then .Bookmarks("Garantia").range.Text = garantia
+        If .Bookmarks.Exists("Garantia") Then .Bookmarks("Garantia").range.TexRt = garantia
         If .Bookmarks.Exists("Fecha_Elaborado") Then .Bookmarks("Fecha_Elaborado").range.Text = fechaElaborado
         If .Bookmarks.Exists("Firma_Tecnico") Then .Bookmarks("Firma_Tecnico").range.Text = firmaTecnico
         If .Bookmarks.Exists("Cargo_Tecnico") Then .Bookmarks("Cargo_Tecnico").range.Text = cargoTecnico
@@ -184,8 +211,15 @@ Sub Terminos_de_Referencia_IC()
         If .Bookmarks.Exists("Marco_Legal1") Then .Bookmarks("Marco_Legal1").range.Text = marcoLegal1
         If .Bookmarks.Exists("Marco_Legal2") Then .Bookmarks("Marco_Legal2").range.Text = marcoLegal2
         If .Bookmarks.Exists("Justificacion") Then .Bookmarks("Justificacion").range.Text = justificacion
-
-        ' Añadir datos de productos desde la hoja "PRODUCTOS"
+        If .Bookmarks.Exists("Vigencia_Tecnologica") Then .Bookmarks("Vigencia_Tecnologica").range.Text = vigenciatecnologica
+        If .Bookmarks.Exists("Responsable_Solicitud") Then .Bookmarks("Responsable_Solicitud").range.Text = responsable_solicitud
+        If .Bookmarks.Exists("Responsable_Area_Requirente") Then .Bookmarks("Responsable_Area_Requirente").range.Text = responsable_area
+        If .Bookmarks.Exists("Multas") Then .Bookmarks("Multas").range.Text = multas
+        If .Bookmarks.Exists("Evaluacion") Then .Bookmarks("Evaluacion").range.Text = evaluacion
+        If .Bookmarks.Exists("Funciones_Administrador") Then .Bookmarks("Funciones_Administrador").range.Text = funciones_administrador
+        If .Bookmarks.Exists("Transferencia_Tecnologica") Then .Bookmarks("Transferencia_Tecnologica").range.Text = transferencia_tecnologica
+        If .Bookmarks.Exists("Requisitos_Transferencia_Tecnologica") Then .Bookmarks("Requisitos_Transferencia_Tecnologica").range.Text = requisitos_transferencia
+        ' Añadir datos de productos desde el rango visible
         Set wsProductos = ThisWorkbook.Sheets("PRODUCTOS")
         wsProductos.Unprotect password:=claveGeneral
 
@@ -207,11 +241,11 @@ Sub Terminos_de_Referencia_IC()
         Else
             MsgBox "No hay datos visibles para copiar en la hoja PRODUCTOS.", vbExclamation
         End If
-
+        
         wsProductos.Protect password:=claveGeneral, Scenarios:=True, AllowFormattingRows:=True
     End With
 
-    ' Guardar y cerrar documento
+    ' Guardar y cerrar el documento
     wdDoc.SaveAs2 fileName:=guardarRuta
     wdDoc.Close
     wdApp.Quit
@@ -222,7 +256,7 @@ Sub Terminos_de_Referencia_IC()
     ' Ubicarse en la hoja "ET'S-TDR"
     ThisWorkbook.Sheets("ET'S-TDR").Activate
 
-    ' Eliminar la plantilla descargada temporalmente
+    ' Eliminar el archivo temporal
     On Error Resume Next
     Kill rutaDescargaTemporal
     On Error GoTo 0
@@ -236,5 +270,3 @@ Sub Terminos_de_Referencia_IC()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
-
-

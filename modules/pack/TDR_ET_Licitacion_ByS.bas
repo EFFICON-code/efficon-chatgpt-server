@@ -1,11 +1,11 @@
-Attribute VB_Name = "tdretlicitacionbs"
-Sub TDR_ET_Licitacion_Bienes_Servicios()
+Attribute VB_Name = "TDR_ET_Licitacion_ByS"
+Sub TDR_ET_Licitacion_ByS()
     ' --- DECLARACIONES ---
     Dim wdApp As Object, wdDoc As Object
     Dim objHTTP As Object, objStream As Object
     Dim rutaDescargaTemporal As String, plantillaID As String, plantillaRuta As String, guardarRuta As Variant
 
-    ' DeclaraciÛn de todas las hojas necesarias
+    ' Declaraci√≥n de todas las hojas necesarias
     Dim ws As Worksheet, wsBase As Worksheet, wsProductos As Worksheet, wsPresupuesto As Worksheet
     Dim wsPersonalT As Worksheet, wsExpPT As Worksheet, wsEquipo As Worksheet
     
@@ -13,7 +13,7 @@ Sub TDR_ET_Licitacion_Bienes_Servicios()
     Const claveSecuencias As String = "Admin1991"
     Const claveGeneral As String = "PROEST2023"
 
-    ' Variables para los datos (usando la funciÛn LeerCelda para m·s seguridad)
+    ' Variables para los datos (usando la funci√≥n LeerCelda para m√°s seguridad)
     Dim entidad As String, titulo As String, tipoDeProcedimiento As String, objetoDeContratacion As String
     Dim unidadRequirente As String, antecedente1 As String, antecedente2 As String, antecedente3 As String
     Dim antecedente4 As String, objetivoGeneral As String, objetivosEspecificos As String, justificacion As String
@@ -25,7 +25,7 @@ Sub TDR_ET_Licitacion_Bienes_Servicios()
     Dim cargoTecnicoUnidad As String, nombreTitularUnidad As String, cargoTitularUnidad As String, fechaElaboracion As String
     Dim valordinero As String
     
-    ' --- INICIO DE LA EJECUCI”N ---
+    ' --- INICIO DE LA EJECUCI√ìN ---
     On Error GoTo GestorErrores ' Centralizamos el manejo de errores
 
     ' Desproteger la estructura del libro
@@ -37,15 +37,15 @@ Sub TDR_ET_Licitacion_Bienes_Servicios()
     plantillaID = wsBase.range("D136").Value
     wsBase.Protect password:=claveGeneral
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda D136 de la hoja BBDD.", vbCritical
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda D136 de la hoja BBDD.", vbCritical
         GoTo SalidaLimpia
     End If
     plantillaRuta = "https://drive.google.com/uc?export=download&id=" & plantillaID
 
-    ' Di·logo para guardar el archivo final
+    ' Di√°logo para guardar el archivo final
     guardarRuta = Application.GetSaveAsFilename("DocumentoTerminado.docx", "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         GoTo SalidaLimpia
     End If
 
@@ -54,7 +54,7 @@ Sub TDR_ET_Licitacion_Bienes_Servicios()
     If ws.Visible <> xlSheetVisible Then ws.Visible = xlSheetVisible
     ws.Unprotect password:=claveSecuencias
 
-    ' Usamos la funciÛn LeerCeldaComoString para evitar errores con celdas vacÌas o con fÛrmulas de error
+    ' Usamos la funci√≥n LeerCeldaComoString para evitar errores con celdas vac√≠as o con f√≥rmulas de error
     entidad = LeerCeldaComoString(ws.range("A2"))
     titulo = LeerCeldaComoString(ws.range("AO2"))
     tipoDeProcedimiento = LeerCeldaComoString(ws.range("S2"))
@@ -110,7 +110,7 @@ Sub TDR_ET_Licitacion_Bienes_Servicios()
         objStream.SaveToFile rutaDescargaTemporal, 2
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. CÛdigo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbCritical
+        MsgBox "Error al descargar la plantilla. C√≥digo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbCritical
         GoTo SalidaLimpia
     End If
 
@@ -138,7 +138,7 @@ Sub TDR_ET_Licitacion_Bienes_Servicios()
         If .Bookmarks.Exists("Titulo") Then .Bookmarks("Titulo").range.Text = titulo
         If .Bookmarks.Exists("Tipo_de_Procedimiento") Then .Bookmarks("Tipo_de_Procedimiento").range.Text = tipoDeProcedimiento
         If .Bookmarks.Exists("Objeto_de_Contratacion") Then .Bookmarks("Objeto_de_Contratacion").range.Text = objetoDeContratacion
-        ' ( ... se mantienen todos los dem·s marcadores de texto ... )
+        ' ( ... se mantienen todos los dem√°s marcadores de texto ... )
         If .Bookmarks.Exists("Unidad_Requirente") Then .Bookmarks("Unidad_Requirente").range.Text = unidadRequirente
         If .Bookmarks.Exists("Antecedente1") Then .Bookmarks("Antecedente1").range.Text = antecedente1
         If .Bookmarks.Exists("Antecedente2") Then .Bookmarks("Antecedente2").range.Text = antecedente2
@@ -174,18 +174,18 @@ Sub TDR_ET_Licitacion_Bienes_Servicios()
         If .Bookmarks.Exists("Fecha_elaboracion") Then .Bookmarks("Fecha_elaboracion").range.Text = fechaElaboracion
         If .Bookmarks.Exists("Valor_Dinero") Then .Bookmarks("Valor_Dinero").range.Text = valordinero
 
-        ' --- INICIO DE LA INTEGRACI”N: Copiado de tablas con la subrutina auxiliar ---
+        ' --- INICIO DE LA INTEGRACI√ìN: Copiado de tablas con la subrutina auxiliar ---
         CopiarRangoVisibleAWord "PersonalT", "A1:F11", "Personal_Tecnico", wdDoc, claveGeneral
         CopiarRangoVisibleAWord "ExperienciaPT", "A1:F11", "Exp_Personal_Tecnico", wdDoc, claveGeneral
         CopiarRangoVisibleAWord "EquipoMinimo", "A1:C11", "Equipo_Minimo", wdDoc, claveGeneral
-        ' --- FIN DE LA INTEGRACI”N ---
+        ' --- FIN DE LA INTEGRACI√ìN ---
 
-        ' Tablas que ya tenÌas (se adaptan al nuevo modelo)
+        ' Tablas que ya ten√≠as (se adaptan al nuevo modelo)
         CopiarRangoVisibleAWord "PRODUCTOS", "Productosdt", "Productos", wdDoc, claveGeneral
         CopiarRangoVisibleAWord "PRESUPUESTO", "A1:G801", "Presupuesto_detalle", wdDoc, claveGeneral
     End With
 
-    ' --- FINALIZACI”N Y GUARDADO ---
+    ' --- FINALIZACI√ìN Y GUARDADO ---
     wdDoc.SaveAs2 fileName:=guardarRuta
     MsgBox "El documento se ha generado correctamente en: " & vbCrLf & guardarRuta, vbInformation
 
@@ -217,7 +217,7 @@ SalidaLimpia:
 
 GestorErrores:
     MsgBox "Ha ocurrido un error inesperado:" & vbCrLf & vbCrLf & _
-           "Error #" & Err.Number & ": " & Err.Description, vbCritical, "Error en la EjecuciÛn"
+           "Error #" & Err.Number & ": " & Err.Description, vbCritical, "Error en la Ejecuci√≥n"
     GoTo SalidaLimpia
 End Sub
 
@@ -227,14 +227,14 @@ End Sub
 ' =============================================================================================
 
 Private Sub CopiarRangoVisibleAWord(ByVal wsName As String, ByVal rangeAddress As String, ByVal bookmarkName As String, ByRef wdDoc As Object, ByVal password As String)
-    ' Objetivo: Encapsula la lÛgica para copiar un rango de celdas visibles a un marcador de Word.
+    ' Objetivo: Encapsula la l√≥gica para copiar un rango de celdas visibles a un marcador de Word.
     Dim ws As Worksheet, rngToCopy As range
     Dim sheetWasHidden As Boolean
 
     On Error Resume Next
     Set ws = ThisWorkbook.Sheets(wsName)
     If ws Is Nothing Then
-        MsgBox "Advertencia: La hoja '" & wsName & "' no fue encontrada. Se omitir· este paso.", vbExclamation
+        MsgBox "Advertencia: La hoja '" & wsName & "' no fue encontrada. Se omitir√° este paso.", vbExclamation
         Exit Sub
     End If
     On Error GoTo 0
@@ -251,7 +251,7 @@ Private Sub CopiarRangoVisibleAWord(ByVal wsName As String, ByVal rangeAddress A
     
     ' Copiar rango visible
     On Error Resume Next
-    ' Usamos .Range(rangeAddress) si es una direcciÛn fija, o UsedRange si queremos todo el rango usado.
+    ' Usamos .Range(rangeAddress) si es una direcci√≥n fija, o UsedRange si queremos todo el rango usado.
     If rangeAddress = "UsedRange" Then
         Set rngToCopy = ws.UsedRange.SpecialCells(xlCellTypeVisible)
     Else
@@ -267,7 +267,7 @@ Private Sub CopiarRangoVisibleAWord(ByVal wsName As String, ByVal rangeAddress A
                 If .Tables.Count > 0 Then .Tables(1).AutoFitBehavior 1 ' wdAutoFitWindow
             End With
         Else
-            MsgBox "Advertencia: El marcador '" & bookmarkName & "' no existe en la plantilla. Se omitir· este paso.", vbExclamation
+            MsgBox "Advertencia: El marcador '" & bookmarkName & "' no existe en la plantilla. Se omitir√° este paso.", vbExclamation
         End If
     End If
     
@@ -279,7 +279,7 @@ End Sub
 
 
 Private Function LeerCeldaComoString(ByVal Rango As range) As String
-    ' Objetivo: Lee el valor de una celda de forma segura, devolviendo "" si est· vacÌa o contiene un error.
+    ' Objetivo: Lee el valor de una celda de forma segura, devolviendo "" si est√° vac√≠a o contiene un error.
     On Error Resume Next
     If IsError(Rango.Value) Or IsEmpty(Rango.Value) Then
         LeerCeldaComoString = ""
@@ -288,4 +288,5 @@ Private Function LeerCeldaComoString(ByVal Rango As range) As String
     End If
     On Error GoTo 0
 End Function
+
 

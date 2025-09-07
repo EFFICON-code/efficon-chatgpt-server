@@ -1,11 +1,11 @@
-Attribute VB_Name = "terminosreferenciaconsultoria"
-Sub Terminos_de_Referencia_Consultoria()
+Attribute VB_Name = "TDR_Consultoria"
+Sub TDR_Consultoria()
     ' --- DECLARACIONES ---
     Dim wdApp As Object, wdDoc As Object
     Dim objHTTP As Object, objStream As Object
     Dim rutaDescargaTemporal As String, plantillaID As String, plantillaRuta As String, guardarRuta As Variant
 
-    ' DeclaraciÛn de todas las hojas necesarias
+    ' Declaraci√≥n de todas las hojas necesarias
     Dim ws As Worksheet, wsBase As Worksheet
     Dim wsPersonalT As Worksheet, wsExpPT As Worksheet, wsEquipo As Worksheet, wsConsult As Worksheet
 
@@ -28,7 +28,7 @@ Sub Terminos_de_Referencia_Consultoria()
     Dim obligacionesContratante As String, funcionesAdministrador As String, multas As String, evaluacion As String
     Dim garantias As String, antecedenteAdicional As String, contratacionPreferente As String, requisitosSuscripcion As String
 
-    ' --- INICIO DE LA EJECUCI”N ---
+    ' --- INICIO DE LA EJECUCI√ìN ---
     On Error GoTo GestorErrores
 
     ThisWorkbook.Unprotect password:=claveGeneral
@@ -39,15 +39,15 @@ Sub Terminos_de_Referencia_Consultoria()
     plantillaID = wsBase.range("D134").Value
     wsBase.Protect password:=claveGeneral
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda D134 de la hoja BBDD.", vbCritical
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda D134 de la hoja BBDD.", vbCritical
         GoTo SalidaLimpia
     End If
     plantillaRuta = "https://drive.google.com/uc?export=download&id=" & plantillaID
 
-    ' Di·logo para guardar el archivo final
+    ' Di√°logo para guardar el archivo final
     guardarRuta = Application.GetSaveAsFilename("DocumentoTerminado.docx", "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         GoTo SalidaLimpia
     End If
 
@@ -56,7 +56,7 @@ Sub Terminos_de_Referencia_Consultoria()
     If ws.Visible <> xlSheetVisible Then ws.Visible = xlSheetVisible
     ws.Unprotect password:=claveSecuencias
 
-    ' Usamos la funciÛn LeerCeldaComoString para una lectura segura
+    ' Usamos la funci√≥n LeerCeldaComoString para una lectura segura
     entidad = LeerCeldaComoString(ws.range("A2"))
     titulo = LeerCeldaComoString(ws.range("AO2"))
     objetoDeContratacion = LeerCeldaComoString(ws.range("Q2"))
@@ -126,7 +126,7 @@ Sub Terminos_de_Referencia_Consultoria()
         objStream.SaveToFile rutaDescargaTemporal, 2
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. CÛdigo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbCritical
+        MsgBox "Error al descargar la plantilla. C√≥digo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbCritical
         GoTo SalidaLimpia
     End If
 
@@ -153,7 +153,7 @@ Sub Terminos_de_Referencia_Consultoria()
         If .Bookmarks.Exists("Entidad") Then .Bookmarks("Entidad").range.Text = entidad
         If .Bookmarks.Exists("Titulo") Then .Bookmarks("Titulo").range.Text = titulo
         If .Bookmarks.Exists("Objeto_de_Contratacion") Then .Bookmarks("Objeto_de_Contratacion").range.Text = objetoDeContratacion
-        ' ( ... y todos los dem·s marcadores de texto ... )
+        ' ( ... y todos los dem√°s marcadores de texto ... )
         If .Bookmarks.Exists("Unidad_Requirente") Then .Bookmarks("Unidad_Requirente").range.Text = unidadRequirente
         If .Bookmarks.Exists("Antecedente1") Then .Bookmarks("Antecedente1").range.Text = antecedente1
         If .Bookmarks.Exists("Antecedente2") Then .Bookmarks("Antecedente2").range.Text = antecedente2
@@ -204,16 +204,16 @@ Sub Terminos_de_Referencia_Consultoria()
         If .Bookmarks.Exists("Contratacion_Preferente") Then .Bookmarks("Contratacion_Preferente").range.Text = contratacionPreferente
         If .Bookmarks.Exists("Requisitos_Suscripcion") Then .Bookmarks("Requisitos_Suscripcion").range.Text = requisitosSuscripcion
 
-        ' --- INICIO DE LA INTEGRACI”N: Copiado de tablas con la subrutina auxiliar ---
+        ' --- INICIO DE LA INTEGRACI√ìN: Copiado de tablas con la subrutina auxiliar ---
         CopiarRangoVisibleAWord "PersonalT", "A1:F11", "Personal_Tecnico", wdDoc, claveGeneral
         CopiarRangoVisibleAWord "ExperienciaPT", "A1:F11", "Exp_Personal_Tecnico", wdDoc, claveGeneral
         CopiarRangoVisibleAWord "EquipoMinimo", "A1:C11", "Equipo_Minimo", wdDoc, claveGeneral
         CopiarRangoVisibleAWord "ET-REFPAC-INF-CONSULT", "CostosConsultoria", "Costos_Consultoria", wdDoc, claveGeneral
-        ' --- FIN DE LA INTEGRACI”N ---
+        ' --- FIN DE LA INTEGRACI√ìN ---
 
     End With
 
-    ' --- FINALIZACI”N Y GUARDADO ---
+    ' --- FINALIZACI√ìN Y GUARDADO ---
     wdDoc.SaveAs2 fileName:=guardarRuta
     MsgBox "El documento se ha generado correctamente en: " & vbCrLf & guardarRuta, vbInformation
 
@@ -243,7 +243,7 @@ SalidaLimpia:
 
 GestorErrores:
     MsgBox "Ha ocurrido un error inesperado:" & vbCrLf & vbCrLf & _
-           "Error #" & Err.Number & ": " & Err.Description, vbCritical, "Error en la EjecuciÛn"
+           "Error #" & Err.Number & ": " & Err.Description, vbCritical, "Error en la Ejecuci√≥n"
     GoTo SalidaLimpia
 End Sub
 
@@ -253,14 +253,14 @@ End Sub
 ' =============================================================================================
 
 Private Sub CopiarRangoVisibleAWord(ByVal wsName As String, ByVal rangeAddress As String, ByVal bookmarkName As String, ByRef wdDoc As Object, ByVal password As String)
-    ' Objetivo: Encapsula la lÛgica para copiar un rango de celdas visibles a un marcador de Word.
+    ' Objetivo: Encapsula la l√≥gica para copiar un rango de celdas visibles a un marcador de Word.
     Dim ws As Worksheet, rngToCopy As range
     Dim sheetWasHidden As Boolean
 
     On Error Resume Next
     Set ws = ThisWorkbook.Sheets(wsName)
     If ws Is Nothing Then
-        MsgBox "Advertencia: La hoja '" & wsName & "' no fue encontrada. Se omitir· este paso.", vbExclamation
+        MsgBox "Advertencia: La hoja '" & wsName & "' no fue encontrada. Se omitir√° este paso.", vbExclamation
         Exit Sub
     End If
     On Error GoTo 0
@@ -288,7 +288,7 @@ Private Sub CopiarRangoVisibleAWord(ByVal wsName As String, ByVal rangeAddress A
                 If .Tables.Count > 0 Then .Tables(1).AutoFitBehavior 1 ' wdAutoFitWindow
             End With
         Else
-            MsgBox "Advertencia: El marcador '" & bookmarkName & "' no existe en la plantilla. Se omitir· este paso.", vbExclamation
+            MsgBox "Advertencia: El marcador '" & bookmarkName & "' no existe en la plantilla. Se omitir√° este paso.", vbExclamation
         End If
     End If
     
@@ -300,7 +300,7 @@ End Sub
 
 
 Private Function LeerCeldaComoString(ByVal Rango As range) As String
-    ' Objetivo: Lee el valor de una celda de forma segura, devolviendo "" si est· vacÌa o contiene un error.
+    ' Objetivo: Lee el valor de una celda de forma segura, devolviendo "" si est√° vac√≠a o contiene un error.
     On Error Resume Next
     If IsError(Rango.Value) Or IsEmpty(Rango.Value) Then
         LeerCeldaComoString = ""
@@ -309,4 +309,5 @@ Private Function LeerCeldaComoString(ByVal Rango As range) As String
     End If
     On Error GoTo 0
 End Function
+
 

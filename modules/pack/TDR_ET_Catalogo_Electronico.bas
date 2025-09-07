@@ -1,6 +1,6 @@
-Attribute VB_Name = "tdretcatalogoelectronico"
+Attribute VB_Name = "TDR_ET_Catalogo_Electronico"
 Sub TDR_ET_Catalogo_Electronico()
-    ' DeclaraciÛn de variables
+    ' Declaraci√≥n de variables
     Dim wdApp As Object
     Dim wdDoc As Object
 
@@ -50,7 +50,7 @@ Sub TDR_ET_Catalogo_Electronico()
     ' Leer el ID de la plantilla desde la celda D133
     plantillaID = wsBase.range("D133").Value
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda D133 de la hoja BBDD.", vbExclamation
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda D133 de la hoja BBDD.", vbExclamation
         Exit Sub
     End If
 
@@ -60,11 +60,11 @@ Sub TDR_ET_Catalogo_Electronico()
     ' Proteger nuevamente la hoja "BBDD"
     wsBase.Protect password:=claveGeneral
 
-    ' Mostrar cuadro de di·logo para la ubicaciÛn donde guardar el documento terminado
+    ' Mostrar cuadro de di√°logo para la ubicaci√≥n donde guardar el documento terminado
     guardarRuta = Application.GetSaveAsFilename( _
         "DocumentoTerminado.docx", "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Or guardarRuta = "" Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         Exit Sub
     End If
 
@@ -114,8 +114,8 @@ Sub TDR_ET_Catalogo_Electronico()
         objStream.SaveToFile rutaDescargaTemporal, 2 ' Sobrescribe si existe
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. Verifique la conexiÛn o el enlace." & vbCrLf & _
-               "CÛdigo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
+        MsgBox "Error al descargar la plantilla. Verifique la conexi√≥n o el enlace." & vbCrLf & _
+               "C√≥digo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
         Exit Sub
     End If
 
@@ -163,7 +163,7 @@ Sub TDR_ET_Catalogo_Electronico()
         If .Bookmarks.Exists("Nombre_Titular_Unidad") Then .Bookmarks("Nombre_Titular_Unidad").range.Text = nombreTitularUnidad
         If .Bookmarks.Exists("Cargo_Titular_Unidad") Then .Bookmarks("Cargo_Titular_Unidad").range.Text = cargoTitularUnidad
 
-        ' AÒadir datos de productos desde la hoja "PRODUCTOS"
+        ' A√±adir datos de productos desde la hoja "PRODUCTOS"
         Set wsProductos = ThisWorkbook.Sheets("PRODUCTOS")
         wsProductos.Unprotect password:=claveGeneral
 
@@ -216,4 +216,5 @@ Sub TDR_ET_Catalogo_Electronico()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+
 

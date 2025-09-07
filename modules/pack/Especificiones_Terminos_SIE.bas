@@ -1,6 +1,6 @@
-Attribute VB_Name = "especificacionessubastainversa"
+Attribute VB_Name = "Especificiones_Terminos_SIE"
 Sub Especificiones_Terminos_SIE()
-    ' DeclaraciÛn de variables
+    ' Declaraci√≥n de variables
     Dim wdApp As Object
     Dim wdDoc As Object
 
@@ -67,7 +67,7 @@ Sub Especificiones_Terminos_SIE()
     ' Leer el ID de la plantilla desde la celda D139
     plantillaID = wsBase.range("D139").Value
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda D139 de la hoja BBDD.", vbExclamation
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda D139 de la hoja BBDD.", vbExclamation
         Exit Sub
     End If
 
@@ -77,11 +77,11 @@ Sub Especificiones_Terminos_SIE()
     ' Proteger nuevamente la hoja "BBDD"
     wsBase.Protect password:=claveGeneral
 
-    ' Mostrar cuadro de di·logo para seleccionar dÛnde se guardar· el documento terminado
+    ' Mostrar cuadro de di√°logo para seleccionar d√≥nde se guardar√° el documento terminado
     guardarRuta = Application.GetSaveAsFilename( _
         "DocumentoTerminado.docx", "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Or guardarRuta = "" Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         Exit Sub
     End If
 
@@ -145,8 +145,8 @@ Sub Especificiones_Terminos_SIE()
         objStream.SaveToFile rutaDescargaTemporal, 2 ' Sobrescribe si existe
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. Verifique la conexiÛn o el enlace." & vbCrLf & _
-               "CÛdigo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
+        MsgBox "Error al descargar la plantilla. Verifique la conexi√≥n o el enlace." & vbCrLf & _
+               "C√≥digo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
         Exit Sub
     End If
 
@@ -260,5 +260,6 @@ Sub Especificiones_Terminos_SIE()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+
 
 

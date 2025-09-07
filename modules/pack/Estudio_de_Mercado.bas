@@ -1,6 +1,6 @@
-Attribute VB_Name = "estudiodemercado"
+Attribute VB_Name = "Estudio_de_Mercado"
 Sub Estudio_de_Mercado()
-    ' DeclaraciÛn de variables
+    ' Declaraci√≥n de variables
     Dim wdApp As Object
     Dim wdDoc As Object
     Dim guardarRuta As Variant
@@ -57,7 +57,7 @@ Sub Estudio_de_Mercado()
     ' Leer el ID de la plantilla desde la celda D141
     plantillaID = wsBase.range("D141").Value
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda D141 de la hoja BBDD.", vbExclamation
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda D141 de la hoja BBDD.", vbExclamation
         Exit Sub
     End If
 
@@ -67,10 +67,10 @@ Sub Estudio_de_Mercado()
     ' Proteger la hoja "BBDD" nuevamente
     wsBase.Protect password:=claveOtrasHojas
 
-    ' Mostrar cuadro de di·logo para seleccionar la ubicaciÛn donde guardar el documento terminado
+    ' Mostrar cuadro de di√°logo para seleccionar la ubicaci√≥n donde guardar el documento terminado
     guardarRuta = Application.GetSaveAsFilename("DocumentoTerminado.docx", "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Or guardarRuta = "" Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         GoTo Fin
     End If
 
@@ -111,8 +111,8 @@ Sub Estudio_de_Mercado()
         objStream.SaveToFile rutaDescargaTemporal, 2 ' Sobrescribe si existe
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. Revise la conexiÛn o el enlace." & vbCrLf & _
-               "CÛdigo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
+        MsgBox "Error al descargar la plantilla. Revise la conexi√≥n o el enlace." & vbCrLf & _
+               "C√≥digo de estado: " & objHTTP.status & " - " & objHTTP.statusText, vbExclamation
         GoTo Fin
     End If
 
@@ -182,7 +182,7 @@ Sub Estudio_de_Mercado()
                     End With
                 End If
             Else
-                MsgBox "El rango 'Productosdt' est· vacÌo.", vbExclamation
+                MsgBox "El rango 'Productosdt' est√° vac√≠o.", vbExclamation
             End If
         Else
             MsgBox "No hay datos visibles para copiar en la hoja PRODUCTOS.", vbExclamation
@@ -211,10 +211,10 @@ Sub Estudio_de_Mercado()
                         End If
                     End With
                 Else
-                    MsgBox "El marcador 'Aplicabilidad' no se encontrÛ en la plantilla."
+                    MsgBox "El marcador 'Aplicabilidad' no se encontr√≥ en la plantilla."
                 End If
             Else
-                MsgBox "El rango en 'APLICABILIDAD' est· vacÌo.", vbExclamation
+                MsgBox "El rango en 'APLICABILIDAD' est√° vac√≠o.", vbExclamation
             End If
         Else
             MsgBox "No hay datos visibles para copiar en la hoja APLICABILIDAD.", vbExclamation
@@ -243,10 +243,10 @@ Sub Estudio_de_Mercado()
                         End If
                     End With
                 Else
-                    MsgBox "El marcador 'Precios_Adjudicados' no se encontrÛ en la plantilla."
+                    MsgBox "El marcador 'Precios_Adjudicados' no se encontr√≥ en la plantilla."
                 End If
             Else
-                MsgBox "El rango en 'PRECIOS_ADJUDICADOS' est· vacÌo.", vbExclamation
+                MsgBox "El rango en 'PRECIOS_ADJUDICADOS' est√° vac√≠o.", vbExclamation
             End If
         Else
             MsgBox "No hay datos visibles para copiar en la hoja PRECIOS_ADJUDICADOS.", vbExclamation
@@ -275,10 +275,10 @@ Sub Estudio_de_Mercado()
                         End If
                     End With
                 Else
-                    MsgBox "El marcador 'Precios_Actualizados' no se encontrÛ en la plantilla."
+                    MsgBox "El marcador 'Precios_Actualizados' no se encontr√≥ en la plantilla."
                 End If
             Else
-                MsgBox "El rango en 'PRECIOS_ACTUALIZADOS' est· vacÌo.", vbExclamation
+                MsgBox "El rango en 'PRECIOS_ACTUALIZADOS' est√° vac√≠o.", vbExclamation
             End If
         Else
             MsgBox "No hay datos visibles para copiar en la hoja PRECIOS_ACTUALIZADOS.", vbExclamation
@@ -307,10 +307,10 @@ Sub Estudio_de_Mercado()
                         End If
                     End With
                 Else
-                    MsgBox "El marcador 'Precios_Proformas' no se encontrÛ en la plantilla."
+                    MsgBox "El marcador 'Precios_Proformas' no se encontr√≥ en la plantilla."
                 End If
             Else
-                MsgBox "El rango en 'PRECIOS_PROFORMAS' est· vacÌo.", vbExclamation
+                MsgBox "El rango en 'PRECIOS_PROFORMAS' est√° vac√≠o.", vbExclamation
             End If
         Else
             MsgBox "No hay datos visibles para copiar en la hoja PRECIOS_PROFORMAS.", vbExclamation
@@ -339,10 +339,10 @@ Sub Estudio_de_Mercado()
                         End If
                     End With
                 Else
-                    MsgBox "El marcador 'Detalle_Presupuesto' no se encontrÛ en la plantilla."
+                    MsgBox "El marcador 'Detalle_Presupuesto' no se encontr√≥ en la plantilla."
                 End If
             Else
-                MsgBox "El rango en 'PRESUPUESTO' est· vacÌo.", vbExclamation
+                MsgBox "El rango en 'PRESUPUESTO' est√° vac√≠o.", vbExclamation
             End If
         Else
             MsgBox "No hay datos visibles para copiar en la hoja PRESUPUESTO.", vbExclamation
@@ -383,5 +383,6 @@ ErrorHandler:
     ThisWorkbook.Protect password:=claveOtrasHojas, Structure:=True
     GoTo Fin
 End Sub
+
 
 

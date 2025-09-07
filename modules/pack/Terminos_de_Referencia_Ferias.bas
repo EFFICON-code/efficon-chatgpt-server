@@ -1,5 +1,5 @@
-Attribute VB_Name = "Terminos_de_Referencia_Ferias_Inclusivas"
-Sub Terminos_de_Referencia_Ferias_Inclusivas()
+Attribute VB_Name = "Terminos_de_Referencia_Ferias"
+Sub Terminos_de_Referencia_Ferias()
     ' Declaración de variables
     Dim wdApp As Object
     Dim wdDoc As Object
@@ -289,6 +289,7 @@ Sub Terminos_de_Referencia_Ferias_Inclusivas()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+
 
 
 

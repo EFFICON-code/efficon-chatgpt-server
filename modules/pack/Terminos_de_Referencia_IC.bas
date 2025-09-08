@@ -196,13 +196,13 @@ Sub Terminos_de_Referencia_IC()
         If .Bookmarks.Exists("Forma_de_Pago") Then .Bookmarks("Forma_de_Pago").range.Text = formaDePago
         If .Bookmarks.Exists("Plazo") Then .Bookmarks("Plazo").range.Text = plazo
         If .Bookmarks.Exists("Obligaciones_Contratista") Then .Bookmarks("Obligaciones_Contratista").range.Text = obligacionesContratista
-        If .Bookmarks.Exists("Obligaciones_Contratante") Then .Bookmarks("Obligaciones_Contratante").range.Text = obligacionescontrante
+        If .Bookmarks.Exists("Obligaciones_Contratante") Then .Bookmarks("Obligaciones_Contratante").range.Text = obligaciones_contrante
         If .Bookmarks.Exists("Vigencia_Oferta") Then .Bookmarks("Vigencia_Oferta").range.Text = vigenciaOferta
         If .Bookmarks.Exists("Vigencia_Oferta_1") Then .Bookmarks("Vigencia_Oferta_1").range.Text = vigenciaOferta
         If .Bookmarks.Exists("Datos_Proforma") Then .Bookmarks("Datos_Proforma").range.Text = datosProforma
         If .Bookmarks.Exists("Proforma") Then .Bookmarks("Proforma").range.Text = proforma
         If .Bookmarks.Exists("Lugar_de_Entrega") Then .Bookmarks("Lugar_de_Entrega").range.Text = lugarDeEntrega
-        If .Bookmarks.Exists("Garantia") Then .Bookmarks("Garantia").range.TexRt = garantia
+        If .Bookmarks.Exists("Garantia") Then .Bookmarks("Garantia").range.Text = garantia
         If .Bookmarks.Exists("Fecha_Elaborado") Then .Bookmarks("Fecha_Elaborado").range.Text = fechaElaborado
         If .Bookmarks.Exists("Firma_Tecnico") Then .Bookmarks("Firma_Tecnico").range.Text = firmaTecnico
         If .Bookmarks.Exists("Cargo_Tecnico") Then .Bookmarks("Cargo_Tecnico").range.Text = cargoTecnico
@@ -270,3 +270,4 @@ Sub Terminos_de_Referencia_IC()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+

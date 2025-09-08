@@ -1,6 +1,6 @@
 Attribute VB_Name = "Terminos_de_Referencia_IC_OBRAS"
 Sub Terminos_de_Referencia_IC_OBRAS()
-    ' DeclaraciÛn de variables
+    ' Declaraci√≥n de variables
     Dim objHTTP As Object
     Dim objStream As Object
     Dim rutaDescargaTemporal As String
@@ -63,7 +63,7 @@ Sub Terminos_de_Referencia_IC_OBRAS()
     ' Leer el ID de la plantilla desde la celda B137
     plantillaID = wsBase.range("B137").Value
     If plantillaID = "" Then
-        MsgBox "No se encontrÛ el ID de la plantilla en la celda B137 de la hoja BBDD.", vbExclamation
+        MsgBox "No se encontr√≥ el ID de la plantilla en la celda B137 de la hoja BBDD.", vbExclamation
         Exit Sub
     End If
 
@@ -73,11 +73,11 @@ Sub Terminos_de_Referencia_IC_OBRAS()
     ' Proteger nuevamente la hoja "BBDD"
     wsBase.Protect password:=claveGeneral
 
-    ' Mostrar cuadro de di·logo para seleccionar la ubicaciÛn donde guardar el documento terminado
+    ' Mostrar cuadro de di√°logo para seleccionar la ubicaci√≥n donde guardar el documento terminado
     guardarRuta = Application.GetSaveAsFilename("DocumentoTerminado.docx", _
         "Documentos de Word (*.docx), *.docx", , "Guardar documento terminado")
     If guardarRuta = False Or guardarRuta = "" Then
-        MsgBox "OperaciÛn cancelada por el usuario.", vbInformation
+        MsgBox "Operaci√≥n cancelada por el usuario.", vbInformation
         Exit Sub
     End If
 
@@ -132,7 +132,7 @@ Sub Terminos_de_Referencia_IC_OBRAS()
     ws.Protect password:=claveSecuencias
     ws.Visible = xlSheetHidden
 
-    ' Ruta temporal donde se descargar· la plantilla
+    ' Ruta temporal donde se descargar√° la plantilla
     rutaDescargaTemporal = Environ("TEMP") & "\Plantilla_EspecTecnicasIC_Temp.docx"
     Debug.Print "Ruta temporal: " & rutaDescargaTemporal
 
@@ -142,7 +142,7 @@ Sub Terminos_de_Referencia_IC_OBRAS()
         objHTTP.Send
 
     If objHTTP.status = 200 Then
-        ' Guardar el archivo en la ubicaciÛn temporal
+        ' Guardar el archivo en la ubicaci√≥n temporal
         Set objStream = CreateObject("ADODB.Stream")
         objStream.Type = 1 ' binario
         objStream.Open
@@ -150,8 +150,8 @@ Sub Terminos_de_Referencia_IC_OBRAS()
         objStream.SaveToFile rutaDescargaTemporal, 2 ' Sobrescribe si existe
         objStream.Close
     Else
-        MsgBox "Error al descargar la plantilla. Verifique la conexiÛn o el enlace." & vbCrLf & _
-               "CÛdigo de estado: " & objHTTP.status & " - " & objHTTP.StatusText, vbExclamation
+        MsgBox "Error al descargar la plantilla. Verifique la conexi√≥n o el enlace." & vbCrLf & _
+               "C√≥digo de estado: " & objHTTP.status & " - " & objHTTP.StatusText, vbExclamation
         Exit Sub
     End If
 
@@ -196,13 +196,13 @@ Sub Terminos_de_Referencia_IC_OBRAS()
         If .Bookmarks.Exists("Forma_de_Pago") Then .Bookmarks("Forma_de_Pago").range.Text = formaDePago
         If .Bookmarks.Exists("Plazo") Then .Bookmarks("Plazo").range.Text = plazo
         If .Bookmarks.Exists("Obligaciones_Contratista") Then .Bookmarks("Obligaciones_Contratista").range.Text = obligacionesContratista
-        If .Bookmarks.Exists("Obligaciones_Contratante") Then .Bookmarks("Obligaciones_Contratante").range.Text = obligacionescontrante
+        If .Bookmarks.Exists("Obligaciones_Contratante") Then .Bookmarks("Obligaciones_Contratante").range.Text = obligaciones_contrante
         If .Bookmarks.Exists("Vigencia_Oferta") Then .Bookmarks("Vigencia_Oferta").range.Text = vigenciaOferta
         If .Bookmarks.Exists("Vigencia_Oferta_1") Then .Bookmarks("Vigencia_Oferta_1").range.Text = vigenciaOferta
         If .Bookmarks.Exists("Datos_Proforma") Then .Bookmarks("Datos_Proforma").range.Text = datosProforma
         If .Bookmarks.Exists("Proforma") Then .Bookmarks("Proforma").range.Text = proforma
         If .Bookmarks.Exists("Lugar_de_Entrega") Then .Bookmarks("Lugar_de_Entrega").range.Text = lugarDeEntrega
-        If .Bookmarks.Exists("Garantia") Then .Bookmarks("Garantia").range.TexRt = garantia
+        If .Bookmarks.Exists("Garantia") Then .Bookmarks("Garantia").range.Text = garantia
         If .Bookmarks.Exists("Fecha_Elaborado") Then .Bookmarks("Fecha_Elaborado").range.Text = fechaElaborado
         If .Bookmarks.Exists("Firma_Tecnico") Then .Bookmarks("Firma_Tecnico").range.Text = firmaTecnico
         If .Bookmarks.Exists("Cargo_Tecnico") Then .Bookmarks("Cargo_Tecnico").range.Text = cargoTecnico
@@ -219,7 +219,7 @@ Sub Terminos_de_Referencia_IC_OBRAS()
         If .Bookmarks.Exists("Funciones_Administrador") Then .Bookmarks("Funciones_Administrador").range.Text = funciones_administrador
         If .Bookmarks.Exists("Transferencia_Tecnologica") Then .Bookmarks("Transferencia_Tecnologica").range.Text = transferencia_tecnologica
         If .Bookmarks.Exists("Requisitos_Transferencia_Tecnologica") Then .Bookmarks("Requisitos_Transferencia_Tecnologica").range.Text = requisitos_transferencia
-        ' AÒadir datos de productos desde el rango visible
+        ' A√±adir datos de productos desde el rango visible
         Set wsProductos = ThisWorkbook.Sheets("PRODUCTOS")
         wsProductos.Unprotect password:=claveGeneral
 
@@ -270,4 +270,5 @@ Sub Terminos_de_Referencia_IC_OBRAS()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+
 

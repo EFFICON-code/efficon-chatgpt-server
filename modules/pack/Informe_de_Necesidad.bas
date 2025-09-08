@@ -50,12 +50,13 @@ Sub Informe_de_Necesidad()
     Dim unidadRequirente1 As String
     Dim TipoCompra As String
     Dim TipoProducto As String
+    Dim TipoRegimen As String
     Dim tipoProcedimiento As String
     Dim estandarizacion As String
     Dim responsable_necesidad As String
     Dim cargo_responsable_necesidad As String
     Dim referencia_pac As String
-
+    Dim lugar As String
     ' Claves para desproteger/proteger
     Const claveSecuencias As String = "Admin1991"
     Const claveGeneral As String = "PROEST2023"
@@ -132,11 +133,14 @@ Sub Informe_de_Necesidad()
     unidadRequirente1 = ws.range("DA2").Value
     TipoCompra = ws.range("O2").Value
     TipoProducto = ws.range("P2").Value
+    TipoRegimen = ws.range("BX2").Value
     tipoProcedimiento = ws.range("S2").Value
     estandarizacion = ws.range("HD2").Value
     responsable_necesidad = ws.range("HH2").Value
     cargo_responsable_necesidad = ws.range("HI2").Value
     referencia_pac = ws.range("HJ2").Value
+    lugar = ws.range("FQ2").Value
+    entidad = ws.range("HO2").Value
   
     ' Proteger y ocultar la hoja "SECUENCIAS"
     ws.Protect password:=claveSecuencias
@@ -225,13 +229,18 @@ Sub Informe_de_Necesidad()
         
         ' Nuevos marcadores
         If .Bookmarks.Exists("Unidad_requirente1") Then .Bookmarks("Unidad_requirente1").range.Text = unidadRequirente1
-        If .Bookmarks.Exists("Tipo_compra") Then .Bookmarks("Tipo_compra").range.Text = TipoCompra
-        If .Bookmarks.Exists("Tipo_producto") Then .Bookmarks("Tipo_producto").range.Text = TipoProducto
-        If .Bookmarks.Exists("Tipo_procedimiento") Then .Bookmarks("Tipo_procedimiento").range.Text = tipoProcedimiento
+        If .Bookmarks.Exists("Tipo_de_Compra") Then .Bookmarks("Tipo_de_Compra").range.Text = TipoCompra
+        If .Bookmarks.Exists("Tipo_de_producto") Then .Bookmarks("Tipo_de_producto").range.Text = TipoProducto
+        If .Bookmarks.Exists("Tipo_de_Regimen") Then .Bookmarks("Tipo_de_Regimen").range.Text = TipoRegimen
+        If .Bookmarks.Exists("Tipo_de_procedimiento") Then .Bookmarks("Tipo_de_procedimiento").range.Text = tipoProcedimiento
         If .Bookmarks.Exists("Estandarizacion") Then .Bookmarks("Estandarizacion").range.Text = estandarizacion
-        If .Bookmarks.Exists("Responsable_Necesidad") Then .Bookmarks("Responsable_Necesidad").range.Text = estandarizacion
+        If .Bookmarks.Exists("Responsable_Necesidad") Then .Bookmarks("Responsable_Necesidad").range.Text = responsable_necesidad
         If .Bookmarks.Exists("Cargo_Responsable_Necesidad") Then .Bookmarks("Cargo_Responsable_Necesidad").range.Text = cargo_responsable_necesidad
         If .Bookmarks.Exists("Referencia_PAC") Then .Bookmarks("Referencia_PAC").range.Text = referencia_pac
+        If .Bookmarks.Exists("Lugar") Then .Bookmarks("Lugar").range.Text = lugar
+        If .Bookmarks.Exists("ENTIDAD") Then .Bookmarks("ENTIDAD").range.Text = entidad
+        If .Bookmarks.Exists("Firma_Titular_Unidad") Then .Bookmarks("Firma_Titular_Unidad").range.Text = nombreTitularUnidad
+        If .Bookmarks.Exists("Cargo_Titular_Unidad_1") Then .Bookmarks("Cargo_Titular_Unidad_1").range.Text = cargoTitularUnidad
         ' Añadir datos de productos desde la hoja PRODUCTOS
         Set wsProductos = ThisWorkbook.Sheets("PRODUCTOS")
         wsProductos.Unprotect password:=claveGeneral
@@ -284,4 +293,3 @@ Sub Informe_de_Necesidad()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
-

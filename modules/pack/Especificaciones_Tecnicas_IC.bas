@@ -196,7 +196,7 @@ Sub Especificaciones_Tecnicas_IC()
         If .Bookmarks.Exists("Forma_de_Pago") Then .Bookmarks("Forma_de_Pago").range.Text = formaDePago
         If .Bookmarks.Exists("Plazo") Then .Bookmarks("Plazo").range.Text = plazo
         If .Bookmarks.Exists("Obligaciones_Contratista") Then .Bookmarks("Obligaciones_Contratista").range.Text = obligacionesContratista
-        If .Bookmarks.Exists("Obligaciones_Contratante") Then .Bookmarks("Obligaciones_Contratante").range.Text = obligacionescontrante
+        If .Bookmarks.Exists("Obligaciones_Contratante") Then .Bookmarks("Obligaciones_Contratante").range.Text = obligaciones_contrante
         If .Bookmarks.Exists("Vigencia_Oferta") Then .Bookmarks("Vigencia_Oferta").range.Text = vigenciaOferta
         If .Bookmarks.Exists("Vigencia_Oferta_1") Then .Bookmarks("Vigencia_Oferta_1").range.Text = vigenciaOferta
         If .Bookmarks.Exists("Datos_Proforma") Then .Bookmarks("Datos_Proforma").range.Text = datosProforma
@@ -270,5 +270,6 @@ Sub Especificaciones_Tecnicas_IC()
 
     MsgBox "El documento se ha generado correctamente.", vbInformation
 End Sub
+
 
 
